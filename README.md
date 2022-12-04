@@ -1,3 +1,3 @@
 Para lanzar la aplicación en local, ejecutar 'npm run nodemon'
 
-Para desplegar a la nube (heroku), ejecutar el script 'npm run deploy'. Debe haber cambios pendientes para que pueda hacerse commit.
+Para desplegar a la nube (cyclic), solo hay que hacer commit y subir al repositorio de github.
