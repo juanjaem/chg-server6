@@ -35,12 +35,12 @@ export interface DatosPluviometricos {
   coordenadasDecimal?: {
     lat: number;
     lng: number;
-  }
+  };
 }
 
 // Establece el tiempo (ms) de validez de los datos antes de que sea necesario actualziarlos
 const tiempoValidezDatos: number = 2 * 60 * 1000; // 2min
-let datosPrecipitacionCache: { fecha: Date, datos: DatosPluviometricos[] } | undefined;
+let datosPrecipitacionCache: { fecha: Date; datos: DatosPluviometricos[] } | undefined;
 
 export const getPrecipitacionesTR = async (req: Request, res: Response, next: NextFunction) => {
   let datosPrecipitacion: DatosPluviometricos[] = [];
@@ -66,35 +66,38 @@ export const getPrecipitacionesTR = async (req: Request, res: Response, next: Ne
 // Captura los datos de precipitaciones en crudo.
 const capturarDatosPluviometricos = async (): Promise<DatosPluviometricosCapturados[]> => {
   return new Promise((resolve, reject) => {
-    axios.default.get('https://www.chguadalquivir.es/saih/LluviaTabla.aspx').then((resp) => {
-      try {
-        const $ = cheerio.load(resp.data);
-        const lista = $('#ContentPlaceHolder1_GridLluviaTiempoReal tbody').children();
-        const datos: DatosPluviometricosCapturados[] = [];
+    axios.default
+      .get('https://www.chguadalquivir.es/saih/LluviaTabla.aspx')
+      .then((resp) => {
+        try {
+          const $ = cheerio.load(resp.data);
+          const lista = $('#ContentPlaceHolder1_GridLluviaTiempoReal tbody').children();
+          const datos: DatosPluviometricosCapturados[] = [];
 
-        lista.each((i, elem) => {
-          if (i === 0) {
-            return; // No queremos la cabecera de la tabla
-          }
-          const fila = $(elem, 'tr').children();
-          const obj = {
-            nombrePluviometro: fila.eq(1).text(),
-            precipitacionesHoraActual: fila.eq(2).text(),
-            precipitacionesHoraAnterior: fila.eq(3).text(),
-            precipitacionesAcumuladoHoy: fila.eq(4).text(),
-            precipitacionesAcumuladoAyer: fila.eq(5).text(),
-            precipitacionesUnidad: fila.eq(6).text()
-          };
-          datos.push(obj);
-          resolve(datos);
-        });
-        return datos;
-      } catch (error) {
-        reject(new Error('Error al obtener los datos de la página cargada de CHG'));
-      }
-    }).catch(() => {
-      reject(new Error('Error al cargar la página de CHG'));
-    });
+          lista.each((i, elem) => {
+            if (i === 0) {
+              return; // No queremos la cabecera de la tabla
+            }
+            const fila = $(elem, 'tr').children();
+            const obj = {
+              nombrePluviometro: fila.eq(1).text(),
+              precipitacionesHoraActual: fila.eq(2).text(),
+              precipitacionesHoraAnterior: fila.eq(3).text(),
+              precipitacionesAcumuladoHoy: fila.eq(5).text(),
+              precipitacionesAcumuladoAyer: fila.eq(6).text(),
+              precipitacionesUnidad: fila.eq(6).text(),
+            };
+            datos.push(obj);
+            resolve(datos);
+          });
+          return datos;
+        } catch (error) {
+          reject(new Error('Error al obtener los datos de la página cargada de CHG'));
+        }
+      })
+      .catch(() => {
+        reject(new Error('Error al cargar la página de CHG'));
+      });
   });
 };
 
@@ -112,7 +115,7 @@ const transformarDatosPluviometricos = (datosPC: DatosPluviometricosCapturados[]
     { codigos: ['HU', ''], nombre: 'Huelva' },
     { codigos: ['JA', ''], nombre: 'Jaén' },
     { codigos: ['ME', 'LAS ADELFAS-MELILLA'], nombre: 'Melilla' },
-    { codigos: ['SE', ''], nombre: 'Sevilla' }
+    { codigos: ['SE', ''], nombre: 'Sevilla' },
   ];
 
   try {
@@ -161,11 +164,11 @@ const transformarDatosPluviometricos = (datosPC: DatosPluviometricosCapturados[]
         pluviometro: {
           codigo: pluviometroCodigo,
           nombreWeb: pluviometroNombre,
-          nombrePdf: infoEstacion?.estacion.nombre
+          nombrePdf: infoEstacion?.estacion.nombre,
         },
         provincia: {
           codigo: provinciaNombreCodigo.codigos[0],
-          nombre: provinciaNombreCodigo.nombre
+          nombre: provinciaNombreCodigo.nombre,
         },
         municipio: infoEstacion?.localizacion.municipio,
         precipitacionesHoraActual: Number(datoPC.precipitacionesHoraActual.replace(',', '.')),
@@ -173,12 +176,12 @@ const transformarDatosPluviometricos = (datosPC: DatosPluviometricosCapturados[]
         precipitacionesAcumuladoHoy: Number(datoPC.precipitacionesAcumuladoHoy.replace(',', '.')),
         precipitacionesAcumuladoAyer: Number(datoPC.precipitacionesAcumuladoAyer.replace(',', '.')),
         precipitacionesUnidad: datoPC.precipitacionesUnidad,
-        coordenadasDecimal: infoEstacion?.coordenadasDecimal
+        coordenadasDecimal: infoEstacion?.coordenadasDecimal,
       };
 
       return datoP;
     });
   } catch (e) {
-    throw (new Error('Error al transformar los datos de precipitaciones en tiempo real'));
+    throw new Error('Error al transformar los datos de precipitaciones en tiempo real');
   }
 };

@@ -97,7 +97,9 @@ exports.getPrecipitacionesTR = getPrecipitacionesTR;
 var capturarDatosPluviometricos = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         return [2 /*return*/, new Promise(function (resolve, reject) {
-                axios.default.get('https://www.chguadalquivir.es/saih/LluviaTabla.aspx').then(function (resp) {
+                axios.default
+                    .get('https://www.chguadalquivir.es/saih/LluviaTabla.aspx')
+                    .then(function (resp) {
                     try {
                         var $_1 = cheerio.load(resp.data);
                         var lista = $_1('#ContentPlaceHolder1_GridLluviaTiempoReal tbody').children();
@@ -111,9 +113,9 @@ var capturarDatosPluviometricos = function () { return __awaiter(void 0, void 0,
                                 nombrePluviometro: fila.eq(1).text(),
                                 precipitacionesHoraActual: fila.eq(2).text(),
                                 precipitacionesHoraAnterior: fila.eq(3).text(),
-                                precipitacionesAcumuladoHoy: fila.eq(4).text(),
-                                precipitacionesAcumuladoAyer: fila.eq(5).text(),
-                                precipitacionesUnidad: fila.eq(6).text()
+                                precipitacionesAcumuladoHoy: fila.eq(5).text(),
+                                precipitacionesAcumuladoAyer: fila.eq(6).text(),
+                                precipitacionesUnidad: fila.eq(6).text(),
                             };
                             datos_1.push(obj);
                             resolve(datos_1);
@@ -123,7 +125,8 @@ var capturarDatosPluviometricos = function () { return __awaiter(void 0, void 0,
                     catch (error) {
                         reject(new Error('Error al obtener los datos de la página cargada de CHG'));
                     }
-                }).catch(function () {
+                })
+                    .catch(function () {
                     reject(new Error('Error al cargar la página de CHG'));
                 });
             })];
@@ -143,7 +146,7 @@ var transformarDatosPluviometricos = function (datosPC) {
         { codigos: ['HU', ''], nombre: 'Huelva' },
         { codigos: ['JA', ''], nombre: 'Jaén' },
         { codigos: ['ME', 'LAS ADELFAS-MELILLA'], nombre: 'Melilla' },
-        { codigos: ['SE', ''], nombre: 'Sevilla' }
+        { codigos: ['SE', ''], nombre: 'Sevilla' },
     ];
     try {
         return datosPC.map(function (datoPC, idx, arr) {
@@ -186,11 +189,11 @@ var transformarDatosPluviometricos = function (datosPC) {
                 pluviometro: {
                     codigo: pluviometroCodigo,
                     nombreWeb: pluviometroNombre,
-                    nombrePdf: infoEstacion === null || infoEstacion === void 0 ? void 0 : infoEstacion.estacion.nombre
+                    nombrePdf: infoEstacion === null || infoEstacion === void 0 ? void 0 : infoEstacion.estacion.nombre,
                 },
                 provincia: {
                     codigo: provinciaNombreCodigo.codigos[0],
-                    nombre: provinciaNombreCodigo.nombre
+                    nombre: provinciaNombreCodigo.nombre,
                 },
                 municipio: infoEstacion === null || infoEstacion === void 0 ? void 0 : infoEstacion.localizacion.municipio,
                 precipitacionesHoraActual: Number(datoPC.precipitacionesHoraActual.replace(',', '.')),
@@ -198,13 +201,13 @@ var transformarDatosPluviometricos = function (datosPC) {
                 precipitacionesAcumuladoHoy: Number(datoPC.precipitacionesAcumuladoHoy.replace(',', '.')),
                 precipitacionesAcumuladoAyer: Number(datoPC.precipitacionesAcumuladoAyer.replace(',', '.')),
                 precipitacionesUnidad: datoPC.precipitacionesUnidad,
-                coordenadasDecimal: infoEstacion === null || infoEstacion === void 0 ? void 0 : infoEstacion.coordenadasDecimal
+                coordenadasDecimal: infoEstacion === null || infoEstacion === void 0 ? void 0 : infoEstacion.coordenadasDecimal,
             };
             return datoP;
         });
     }
     catch (e) {
-        throw (new Error('Error al transformar los datos de precipitaciones en tiempo real'));
+        throw new Error('Error al transformar los datos de precipitaciones en tiempo real');
     }
 };
 //# sourceMappingURL=tiempo-real-precipitaciones.controller.js.map

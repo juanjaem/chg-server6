@@ -4,7 +4,7 @@ import { Router } from 'express';
 export class TiempoRealPrecipitacionesRoute {
   public router = Router();
 
-  constructor () {
+  constructor() {
     // /api/tiempo-real/precipitaciones
     this.router.get('/', getPrecipitacionesTR);
   }

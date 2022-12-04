@@ -7,7 +7,6 @@
     "start": "node dist/index.js",
     "postinstall": "tsc",
     "watch-ts": "tsc -w",
-    "deploy": "git add . && git commit -m Heroku && git push heroku master",
     "nodemon": "nodemon",
     "launch_build": "node ./dist/index.js",
     "prettier": "prettier --config .prettierrc.json --write src/**/*.ts"
