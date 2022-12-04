@@ -1,0 +1,43 @@
+{
+  "name": "chg-server3",
+  "version": "1.0.0",
+  "description": "Backend para scrapping de la página CHGuadalquivir",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "postinstall": "tsc",
+    "watch-ts": "tsc -w",
+    "deploy": "git add . && git commit -m Heroku && git push heroku master",
+    "nodemon": "nodemon",
+    "launch_build": "node ./dist/index.js",
+    "prettier": "prettier --config .prettierrc.json --write src/**/*.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/parser": "^5.7.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "nodemon": "^2.0.15",
+    "prettier": "2.5.1",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "@types/dotenv": "^8.2.0",
+    "axios": "^0.24.0",
+    "cheerio": "^1.0.0-rc.10",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1"
+  },
+  "engines": {
+    "node": "14.16.0"
+  }
+}
