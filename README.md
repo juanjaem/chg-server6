@@ -9,4 +9,4 @@ Para correr el servicor en `http://localhost:3000` es necesario tener instalado 
 
 ## DESPLIEGUE EN LA NUBE (RENDER)
 
-para desplegar a la nube (RENDER), primero hay que generar la build con `npm run postinstall` para que se generen los ficheros de distribución en la carpeta `./dist`. Después solo hay que hacer commit y subir al repositorio de github, y automáticamente 'render' se encarga de desplegar la carpeta `./dist`.
+para desplegar a la nube (RENDER), primero hay que generar la build con `npm run postinstall` para que se generen los ficheros de distribución en la carpeta `./dist`. Después solo hay que hacer commit y subir al repositorio de github. Entrar al proyecto de RENDER y ejecutar un despliegue manual desde el dashboard del proyecto
